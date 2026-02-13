@@ -1,7 +1,5 @@
-node_modules/
 sessions/
 yarn.lock
 Serbot/
 storage/databases/database.json
-package-lock.json
 tmp/
