@@ -4,7 +4,6 @@ import path from 'path'
 import fs from 'fs/promises'
 import { Low, JSONFile } from 'lowdb'
 import os from 'os'
-import localtunnel from 'localtunnel'
 
 (async () => {
 const app = express()
@@ -681,22 +680,8 @@ const getLocalIP = () => {
   return 'localhost'
 }
 
-app.listen(PORT, '0.0.0.0', async () => {
+app.listen(PORT, '0.0.0.0', () => {
   const ip = getLocalIP()
   console.log(`Panel web en http://localhost:${PORT} (accesible desde la red local en http://${ip}:${PORT})`)
-  try {
-    const tunnel = await localtunnel({ port: PORT })
-    console.log(`Acceso público: ${tunnel.url}`)
-    tunnel.on('close', () => console.log('Túnel cerrado'))
-    try {
-      const response = await fetch('https://api.ipify.org?format=json')
-      const data = await response.json()
-      console.log(`Contraseña del túnel: ${data.ip}`)
-    } catch (e) {
-      console.log('Error obteniendo IP pública:', e.message)
-    }
-  } catch (e) {
-    console.log('Error iniciando localtunnel:', e.message)
-  }
 })
 })()
