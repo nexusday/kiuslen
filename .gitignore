@@ -2,4 +2,5 @@ sessions/
 yarn.lock
 Serbot/
 storage/databases/database.json
+
 tmp/
