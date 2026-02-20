@@ -218,7 +218,7 @@ const connectionOptions = {
   browser: Browsers.ubuntu('Chrome'),
   markOnlineOnclientect: true,
   generateHighQualityLinkPreview: true,
-  syncFullHistory: true,
+  syncFullHistory: false,
   retryRequestDelayMs: 10,
   transactionOpts: { maxCommitRetries: 10, delayBetweenTriesMs: 10 },
   maxMsgRetryCount: 15,

@@ -51,12 +51,12 @@ async function sendPublication(conn, groupId, pub, retryCount = 0) {
       mediaBuffer = Buffer.from(pub.image, 'base64')
     }
     
-    const preTypingDelay = Math.random() * 2000 + 1000
+    const preTypingDelay = Math.random() * 1000 + 500
     await new Promise(resolve => setTimeout(resolve, preTypingDelay))
     
     await conn.sendPresenceUpdate('composing', groupId)
     
-    const typingDuration = Math.random() * 10000 + 5000
+    const typingDuration = Math.random() * 3000 + 2000
     await new Promise(resolve => setTimeout(resolve, typingDuration))
     
     const message = {
@@ -133,6 +133,8 @@ function schedulePublication(conn, groupId, pub) {
           } else {
             failureCount++;
           }
+          
+          await new Promise(resolve => setTimeout(resolve, Math.random() * 1000 + 500));
         }
       }
       

@@ -2,5 +2,5 @@ sessions/
 yarn.lock
 Serbot/
 storage/databases/database.json
-
+config.js
 tmp/
