@@ -56,7 +56,7 @@ try {
     user.banned = false
     user.prem = false
     
-    console.log(`✅ Usuario registrado automáticamente: ${m.sender} (${user.name})`)
+   
     
 
   }  
