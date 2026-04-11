@@ -15,12 +15,12 @@ await db.read()
 db.data ||= { users: {}, chats: {}, stats: {}, msgs: {}, sticker: {}, settings: {}, botGroups: {}, antiImg: {}, bienvenidas: {}, publicaciones: {}, groups: [], selectedGroups: [] }
 await db.write()
 
-// Middleware
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use('/images', express.static(path.join(process.cwd(), 'storage/images')))
 
-// Multer
+
 const upload = multer({ storage: multer.memoryStorage() })
 
 app.get('/', async (req, res) => {
@@ -31,7 +31,7 @@ app.get('/', async (req, res) => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOT SPAM V2 -BETA WEB</title>
+    <title>BOT SPAM V2.5 - BETA WEB</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
@@ -195,7 +195,7 @@ app.get('/', async (req, res) => {
     <div class="container">
         <h1><i class="fas fa-robot"></i> BOT SPAM V2 -BETA WEB</h1>`
 
-  // Status
+  
   html += `<div class="section"><h2>Estado de Grupos Seleccionados</h2>`
   const selectedGroups = db.data.selectedGroups || []
   const groupMap = new Map((db.data.groups || []).map(g => [g.id, g.name]))
@@ -223,7 +223,7 @@ app.get('/', async (req, res) => {
   }
   html += `</div>`
 
-  // Seleccionar Grupos
+  
   html += `<div class="section"><h2>1. Seleccionar Grupos</h2>
     <form action="/select-groups" method="post">
       <div class="checkbox-group">`
@@ -234,7 +234,7 @@ app.get('/', async (req, res) => {
   html += `</div><button type="submit">Guardar Selección</button>
     </form></div>`
 
-  // Add Publication
+  
   html += `<div class="section"><h2>2. Agregar Publicación</h2>
     <form action="/add-pub" method="post" enctype="multipart/form-data">
       <label>Texto:</label>
@@ -244,7 +244,7 @@ app.get('/', async (req, res) => {
       <button type="submit">Agregar</button>
     </form></div>`
 
-  // Set Time
+  
   html += `<div class="section"><h2>3. Establecer Temporizador</h2>
     <form action="/set-time" method="post">
       <label>Tiempo (minutos):</label>
@@ -252,7 +252,7 @@ app.get('/', async (req, res) => {
       <button type="submit">Establecer</button>
     </form></div>`
 
-  // Activate/Deactivate
+  
   html += `<div class="section"><h2>4. Activar/Desactivar Publicaciones</h2>
     <form action="/activate" method="post" style="display:inline;">
       <button type="submit" style="background:#28a745;">Activar</button>
@@ -266,8 +266,8 @@ app.get('/', async (req, res) => {
 </body>
 </html>`
 
-  res.send(html)
-})
+  res.send(html);
+});
 
 app.post('/select-groups', async (req, res) => {
   try {
@@ -308,12 +308,12 @@ app.post('/select-groups', async (req, res) => {
         }
       }
     }
-    await db.write()
-    res.redirect('/')
+    await db.write();
+    res.redirect('/');
   } catch (e) {
-    res.send('Error guardando selección: ' + e.message)
+    res.send('Error guardando selección: ' + e.message);
   }
-})
+});
 
 app.post('/add-pub', upload.single('media'), async (req, res) => {
   try {
@@ -348,11 +348,11 @@ app.post('/add-pub', upload.single('media'), async (req, res) => {
       db.data.publicaciones[groupId].publications.push(pub)
     }
     await db.write()
-    res.redirect('/')
+    res.redirect('/');
   } catch (e) {
-    res.send('Error agregando publicación: ' + e.message)
+    res.send('Error agregando publicación: ' + e.message);
   }
-})
+});
 
 app.post('/activate', async (req, res) => {
   const selectedGroups = db.data.selectedGroups || []
@@ -365,9 +365,9 @@ app.post('/activate', async (req, res) => {
       db.data.publicaciones[groupId].enabled = true
     }
   }
-  await db.write()
-  res.redirect('/')
-})
+  await db.write();
+  res.redirect('/');
+});
 
 app.post('/deactivate', async (req, res) => {
   const selectedGroups = db.data.selectedGroups || []
@@ -380,9 +380,9 @@ app.post('/deactivate', async (req, res) => {
       db.data.publicaciones[groupId].enabled = false
     }
   }
-  await db.write()
-  res.redirect('/')
-})
+  await db.write();
+  res.redirect('/');
+});
 
 const parseInterval = (timeStr) => {
   const num = parseFloat(timeStr)
@@ -406,9 +406,9 @@ app.post('/set-time', async (req, res) => {
       console.log(`Temporizador establecido para grupo ${groupId}: ${minutes} min (${ms} ms)`)
     }
   }
-  await db.write()
-  res.redirect('/')
-})
+  await db.write();
+  res.redirect('/');
+});
 
 app.get('/pubs', async (req, res) => {
   await db.read()
@@ -670,21 +670,31 @@ app.get('/pubs', async (req, res) => {
     <div class="container">
         <h1>Todas las Publicaciones</h1>
         <form id="deleteForm" action="/delete-multiple-pubs" method="post">
-        <div class="action-bar">
-            <div>
-                <button type="button" onclick="selectAll()" style="background:#555;"><i class="fas fa-check-square"></i> Seleccionar Todos</button>
-                <button type="button" onclick="window.location.href='/'" style="background:#333;"><i class="fas fa-home"></i> Inicio</button>
+        <div class="action-bar-container" style="position: sticky; top: 20px; z-index: 100; margin-bottom: 20px;">
+            <div class="action-bar" style="margin-bottom: 0;">
+                <div>
+                    <button type="button" onclick="selectAll()" style="background:#555;"><i class="fas fa-check-square"></i> Seleccionar Todos</button>
+                    <button type="button" onclick="window.location.href='/'" style="background:#333;"><i class="fas fa-home"></i> Inicio</button>
+                </div>
+                <button type="submit" class="btn-delete-selected" id="deleteBtn" disabled>
+                    <i class="fas fa-trash"></i> Eliminar Seleccionados (<span id="count">0</span>)
+                </button>
             </div>
-            <button type="submit" class="btn-delete-selected" id="deleteBtn" disabled>
-                <i class="fas fa-trash"></i> Eliminar Seleccionados (<span id="count">0</span>)
-            </button>
+            <div class="pagination" style="background: #1e1e1e; padding: 10px; border-radius: 0 0 10px 10px; border: 1px solid #333; border-top: none; display: flex; justify-content: center; gap: 5px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">`
+  
+  const totalPages = Math.ceil(total / limit)
+  for (let p = 1; p <= totalPages; p++) {
+    html += `<a href="/pubs?page=${p}" style="padding: 2px 12px; background: ${p === page ? '#00d4ff' : '#333'}; border-radius: 5px; color: #fff; text-decoration: none; font-weight: bold; border: 1px solid ${p === page ? '#00d4ff' : '#444'};">${p}</a>`
+  }
+
+  html += `</div>
         </div>`
   for (const item of pubs) {
     const groupName = groupMap.get(item.groupId) || 'Desconocido'
     html += `<div class="pub">
       <div class="pub-header">
         <label style="display:flex; align-items:center; cursor:pointer; flex: 1;">
-            <input type="checkbox" name="pubKeys" value="${item.groupId}:${item.index}" class="pub-checkbox" onchange="updateCount()">
+            <input type="checkbox" form="deleteForm" name="pubKeys" value="${item.groupId}:${item.index}" class="pub-checkbox" onchange="updateCount()">
             <span style="margin-left:15px; font-weight:bold; color: #00d4ff;">${groupName}</span>
             <span style="margin-left:10px; font-size: 0.8em; color: #888;">(${item.groupId})</span>
         </label>
@@ -692,7 +702,15 @@ app.get('/pubs', async (req, res) => {
             <i class="fas fa-trash-alt"></i>
         </button>
       </div>
-      <p><strong>Texto:</strong> ${item.pub.text || ''}</p>`
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <span style="font-weight: bold; color: #888;">Contenido del mensaje:</span>
+        <button type="button" onclick="openEditModal('${item.groupId}', ${item.index})" class="edit-icon" title="Editar texto">
+            <i class="fas fa-edit"></i> Editar Texto
+        </button>
+      </div>
+      <div style="background: #2a2a2a; padding: 15px; border-radius: 8px; margin: 10px 0; border: 1px solid #333;">
+        <div id="text-${item.groupId}-${item.index}" style="white-space: pre-wrap; color: #eee; font-size: 1.1em; line-height: 1.5;">${item.pub.text || ''}</div>
+      </div>`
     if (item.pub.image) {
       const filename = path.basename(item.pub.image)
       if (item.pub.imageType === 'video') {
@@ -711,12 +729,6 @@ app.get('/pubs', async (req, res) => {
     </div>`
   }
   
-  const totalPages = Math.ceil(total / limit)
-  html += '<div class="pagination">'
-  for (let p = 1; p <= totalPages; p++) {
-    html += `<a href="/pubs?page=${p}">${p}</a>`
-  }
-  html += '</div>'
   html += `</form>
   <script>
     function updateCount() {
@@ -749,9 +761,153 @@ app.get('/pubs', async (req, res) => {
     document.getElementById('deleteForm').onsubmit = function() {
         return confirm('¿Eliminar las publicaciones seleccionadas?');
     }
-  </script>`
-  html += '</div></body></html>'
-  res.send(html)
+
+    
+    function openEditModal(groupId, index) {
+        const textElement = document.getElementById('text-' + groupId + '-' + index);
+        const currentText = textElement ? textElement.innerText : '';
+        document.getElementById('editGroupId').value = groupId;
+        document.getElementById('editIndex').value = index;
+        document.getElementById('editText').value = currentText;
+        document.getElementById('editModal').style.display = 'block';
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').style.display = 'none';
+    }
+
+    async function saveEditedText() {
+        const groupId = document.getElementById('editGroupId').value;
+        const index = document.getElementById('editIndex').value;
+        const text = document.getElementById('editText').value;
+        const saveBtn = document.getElementById('saveEditBtn');
+        
+        saveBtn.disabled = true;
+        saveBtn.innerText = 'Guardando...';
+
+        try {
+            const response = await fetch('/edit-pub-text', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ groupId, index: parseInt(index), text })
+            });
+
+            if (response.ok) {
+                
+                const textElement = document.getElementById('text-' + groupId + '-' + index);
+                if (textElement) {
+                    textElement.innerText = text;
+                }
+                closeEditModal();
+                alert('¡Publicación actualizada con éxito!');
+            } else {
+                alert('Error al guardar los cambios.');
+            }
+        } catch (e) {
+            console.error('Error:', e);
+            alert('Error al conectar con el servidor.');
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.innerText = 'Guardar Cambios';
+        }
+    }
+
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('editModal');
+        if (event.target == modal) {
+            closeEditModal();
+        }
+    }
+  </script>
+  
+  <!-- Modal de Edición -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 style="margin: 0; font-size: 1.4em; color: #00d4ff;"><i class="fas fa-edit"></i> Editar Publicación</h2>
+            <button type="button" onclick="closeEditModal()" style="background:none; color:#888; border:none; font-size:1.5em; cursor:pointer;">&times;</button>
+        </div>
+        <input type="hidden" id="editGroupId">
+        <input type="hidden" id="editIndex">
+        <textarea id="editText" rows="10" style="margin-bottom: 0; font-size:1em; line-height:1.5; font-family: inherit;"></textarea>
+        <div class="modal-footer">
+            <button type="button" onclick="closeEditModal()" style="background:#444;">Cancelar</button>
+            <button type="button" id="saveEditBtn" onclick="saveEditedText()" style="background:#28a745;">Guardar Cambios</button>
+        </div>
+    </div>
+  </div>
+  
+  <style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0; top: 0;
+        width: 100%; height: 100%;
+        background-color: rgba(0,0,0,0.85);
+        backdrop-filter: blur(5px);
+    }
+    .modal-content {
+        background-color: #1e1e1e;
+        margin: 5% auto;
+        padding: 25px;
+        border: 1px solid #333;
+        width: 90%;
+        max-width: 600px;
+        border-radius: 15px;
+        box-shadow: 0 5px 30px rgba(0,0,0,0.8);
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 15px;
+    }
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .edit-icon {
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        color: #00d4ff;
+        cursor: pointer;
+        font-size: 0.9em;
+        padding: 6px 12px;
+        border-radius: 6px;
+        transition: 0.3s;
+    }
+    .edit-icon:hover {
+        background: rgba(0, 212, 255, 0.2);
+        color: white;
+    }
+  </style>`;
+  html += '</div></body></html>';
+  res.send(html);
+});
+
+app.post('/edit-pub-text', async (req, res) => {
+  try {
+    const { groupId, index, text } = req.body
+    await db.read()
+    
+    if (db.data.publicaciones[groupId] && db.data.publicaciones[groupId].publications) {
+      const idx = parseInt(index)
+      if (idx >= 0 && idx < db.data.publicaciones[groupId].publications.length) {
+        db.data.publicaciones[groupId].publications[idx].text = text
+        await db.write()
+        return res.sendStatus(200)
+      }
+    }
+    res.status(404).send('Publicación no encontrada')
+  } catch (e) {
+    res.status(500).send(e.message)
+  }
 })
 
 app.post('/delete-multiple-pubs', async (req, res) => {
@@ -762,7 +918,7 @@ app.post('/delete-multiple-pubs', async (req, res) => {
     const keys = Array.isArray(pubKeys) ? pubKeys : [pubKeys]
     await db.read()
     
-    const toDelete = {} // { groupId: [indices_to_remove] }
+    const toDelete = {} 
     
     for (const key of keys) {
       const [groupId, index] = key.split(':')
@@ -772,7 +928,7 @@ app.post('/delete-multiple-pubs', async (req, res) => {
     
     for (const groupId in toDelete) {
       if (db.data.publicaciones[groupId] && db.data.publicaciones[groupId].publications) {
-        // Sort indices descending to keep removal from affecting higher indices
+        
         const indices = toDelete[groupId].sort((a, b) => b - a)
         for (const idx of indices) {
           const pub = db.data.publicaciones[groupId].publications[idx]
@@ -789,12 +945,12 @@ app.post('/delete-multiple-pubs', async (req, res) => {
       }
     }
     
-    await db.write()
-    res.redirect('/pubs')
+    await db.write();
+    res.redirect('/pubs');
   } catch (e) {
-    res.send('Error eliminando publicaciones: ' + e.message)
+    res.send('Error eliminando publicaciones: ' + e.message);
   }
-})
+});
 
 app.post('/toggle-pub', async (req, res) => {
   const { groupId, index } = req.body
@@ -806,9 +962,9 @@ app.post('/toggle-pub', async (req, res) => {
       pub.enabled = !(pub.enabled !== false)
     }
   }
-  await db.write()
-  res.redirect('/pubs')
-})
+  await db.write();
+  res.redirect('/pubs');
+});
 
 app.post('/delete-pub', async (req, res) => {
   const { groupId, index } = req.body
